@@ -1,6 +1,7 @@
 package com.luke.commentpost.resources;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luke.commentpost.domain.User;
+import com.luke.commentpost.dto.UserDTO;
 import com.luke.commentpost.services.UserService;
 
 @RestController
@@ -20,8 +22,9 @@ public class UserResource {
 
     // @RequestMapping(method = RequestMethod.GET)
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         List<User> list = service.findAll();
-        return ResponseEntity.ok().body(list);
+        List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList()); // to return a list DTO        
+        return ResponseEntity.ok().body(listDto);
     }
 }
